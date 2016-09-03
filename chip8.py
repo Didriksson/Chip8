@@ -14,7 +14,8 @@ class chip8(object):
             0x5: self.skipNextInstructionIfVXEqualsVY,
             0x6: self.setVXToNN,
             0x7: self.addVXToNN,
-            0x8: self.logicalOperation
+            0x8: self.logicalOperation,
+            0x9: self.skipNextInstructionIfVXDoesNotEqualsVY
         }
 
         self.logicalOperations = {
@@ -50,6 +51,13 @@ class chip8(object):
         register2 = operand >> 4 & 0xF
         if self.registers[register1] == self.registers[register2]:
             self.PC += 2
+
+    def skipNextInstructionIfVXDoesNotEqualsVY(self, operand):
+        register1 = operand >> 8 & 0xF
+        register2 = operand >> 4 & 0xF
+        if self.registers[register1] != self.registers[register2]:
+            self.PC += 2
+
 
     def setVXToNN(self, operand):
         register = operand >> 8 & 0xF

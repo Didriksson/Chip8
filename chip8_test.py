@@ -155,6 +155,19 @@ class chip8_test(unittest.TestCase):
         self.assertEqual(cpu.registers[0xA], 0x4)
         self.assertEqual(cpu.registers[0xF], 0x0)
 
+    # 9XY0
+    def testSkipNextInstructionIfVXDoesNotEqualsVY(self):
+        cpu = chip8()
+        cpu.PC = 0
+        cpu.registers[0xA] = 0xFF
+        self.assertEqual(cpu.registers[0xA], 0xFF)
+        self.assertEqual(cpu.PC, 0)
+        cpu.executeInstruction(0x9AF0)
+        self.assertEqual(cpu.PC, 4)
+        cpu.registers[0xF] = 0xFF
+        self.assertEqual(cpu.registers[0xF], 0xFF)
+        cpu.executeInstruction(0x9AF0)
+        self.assertEqual(cpu.PC, 6)
 
 if __name__ == '__main__':
     unittest.main()
